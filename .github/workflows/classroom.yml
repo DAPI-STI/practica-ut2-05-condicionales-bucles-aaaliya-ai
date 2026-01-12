@@ -1,0 +1,86 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: EX01 – sign
+      id: ex01-sign
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: EX01 – sign
+        setup-command: python -m pip install --upgrade pip && python -m pip install
+          -r requirements.txt
+        command: python -m pytest -q -k "test_ex01"
+        timeout: 30
+        max-score: 10
+    - name: EX02 – leap_year
+      id: ex02-leap_year
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: EX02 – leap_year
+        setup-command: python -m pip install --upgrade pip && python -m pip install
+          -r requirements.txt
+        command: python -m pytest -q -k "test_ex02"
+        timeout: 30
+        max-score: 15
+    - name: EX03 – sum_first_n
+      id: ex03-sum_first_n
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: EX03 – sum_first_n
+        setup-command: python -m pip install --upgrade pip && python -m pip install
+          -r requirements.txt
+        command: python -m pytest -q -k "test_ex03"
+        timeout: 30
+        max-score: 15
+    - name: EX04 – factorial
+      id: ex04-factorial
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: EX04 – factorial
+        setup-command: python -m pip install --upgrade pip && python -m pip install
+          -r requirements.txt
+        command: python -m pytest -q -k "test_ex04"
+        timeout: 30
+        max-score: 20
+    - name: EX05 – multiplication_table
+      id: ex05-multiplication_table
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: EX05 – multiplication_table
+        setup-command: python -m pip install --upgrade pip && python -m pip install
+          -r requirements.txt
+        command: python -m pytest -q -k "test_ex05"
+        timeout: 30
+        max-score: 10
+    - name: EX06 – fizzbuzz
+      id: ex06-fizzbuzz
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: EX06 – fizzbuzz
+        setup-command: python -m pip install --upgrade pip && python -m pip install
+          -r requirements.txt
+        command: python -m pytest -q -k "test_ex06"
+        timeout: 30
+        max-score: 30
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        EX01-SIGN_RESULTS: "${{steps.ex01-sign.outputs.result}}"
+        EX02-LEAP_YEAR_RESULTS: "${{steps.ex02-leap_year.outputs.result}}"
+        EX03-SUM_FIRST_N_RESULTS: "${{steps.ex03-sum_first_n.outputs.result}}"
+        EX04-FACTORIAL_RESULTS: "${{steps.ex04-factorial.outputs.result}}"
+        EX05-MULTIPLICATION_TABLE_RESULTS: "${{steps.ex05-multiplication_table.outputs.result}}"
+        EX06-FIZZBUZZ_RESULTS: "${{steps.ex06-fizzbuzz.outputs.result}}"
+      with:
+        runners: ex01-sign,ex02-leap_year,ex03-sum_first_n,ex04-factorial,ex05-multiplication_table,ex06-fizzbuzz
